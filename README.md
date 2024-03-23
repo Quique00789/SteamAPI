@@ -1,3 +1,7 @@
+#Para el correcto funcionamiento
+Es necesario que su perfil de steam este en publico 
+![image](https://github.com/Quique00789/SteamAPI/assets/123757814/da4a40a1-db23-4128-8742-6ac922c8f1f8)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
