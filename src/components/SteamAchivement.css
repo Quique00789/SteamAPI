@@ -1,0 +1,20 @@
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Updated property */
+  border-bottom: 1px solid #ccc;
+  padding: 10px;
+}
+
+img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+h3 {
+  margin: 0;
+  margin-right: 10px;
+  color: #000;
+  animation: colorAnimation 2s infinite;
+}
