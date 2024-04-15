@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import SteamProfile from './components/SteamProfile';
 import SteamAchievement from './components/SteamAchievement';
 import './App.css';
+
 const App = () => {
   const [steamId, setSteamId] = useState('');
   const [appId, setAppId] = useState('');
   const [achievements, setAchievements] = useState([]);
   const [gameName, setGameName] = useState('');
+  const [showAllGames, setShowAllGames] = useState(true);
 
   const fetchAchievements = async () => {
     const apiKey = 'FFEC4AEACAC372C820F7F57EAE503D8D';
@@ -16,16 +19,23 @@ const App = () => {
     try {
       const response = await fetch(url);
       const data = await response.json();
-
       if (data.playerstats) {
         setAchievements(data.playerstats.achievements);
         setGameName(data.playerstats.gameName);
+        setShowAllGames(false);
       } else {
         console.error('Error al obtener los logros de Steam.');
       }
     } catch (error) {
       console.error('Error al hacer la solicitud a la API de Steam:', error);
     }
+  };
+
+  const handleCloseAchievements = () => {
+    setAppId('');
+    setAchievements([]);
+    setGameName('');
+    setShowAllGames(true);
   };
 
   const handleSubmit = (e) => {
@@ -35,31 +45,44 @@ const App = () => {
 
   return (
     <div>
-      <h1>Logros de Steam</h1>
+      <h1>Steam Profile and Achievements</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="ID de Steam"
+          placeholder="Steam ID"
           value={steamId}
           onChange={(e) => setSteamId(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="ID del juego"
-          value={appId}
-          onChange={(e) => setAppId(e.target.value)}
-        />
-        <button type="submit">Obtener logros</button>
+        {!showAllGames && (
+          <button onClick={handleCloseAchievements}>Close Achievements</button>
+        )}
+        {showAllGames && (
+          <>
+            <input
+              type="text"
+              value={appId}
+              onChange={(e) => setAppId(e.target.value)}
+            />
+            <button type="submit">Fetch Achievements</button>
+          </>
+        )}
       </form>
-      <h2>{gameName}</h2>
-      {achievements.map((achievement, index) => (
-        <SteamAchievement
-          key={index}
-          name={achievement.name}
-          achieved={achievement.achieved === 1}
-          icon={`https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/${appId}/${achievement.name}.png`}
-        />
-      ))}
+
+      <SteamProfile steamId={steamId} setAppId={setAppId} fetchAchievements={fetchAchievements} showAllGames={showAllGames} />
+
+      {achievements && achievements.length > 0 && (
+        <>
+          <h2>{gameName}</h2>
+          {achievements.map((achievement, index) => (
+            <SteamAchievement
+              key={index}
+              name={achievement.name}
+              achieved={achievement.achieved === 1}
+              icon={`https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/${appId}/${achievement.name}.png`}
+            />
+          ))}
+        </>
+      )}
     </div>
   );
 };

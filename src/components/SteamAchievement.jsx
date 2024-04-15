@@ -1,5 +1,5 @@
 import React from 'react';
-import './SteamAchivement.css'; // Ensure that the './SteamAchievement.css' file exists and is accessible in the specified path.
+import './SteamAchivement.css'; 
 const SteamAchievement = ({ name, achieved, icon }) => {
   return (
     <div>
