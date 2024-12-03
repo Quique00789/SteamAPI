@@ -4,33 +4,46 @@ const SteamProfile = ({ steamId, setAppId, fetchAchievements, showAllGames }) =>
   const [playerSummary, setPlayerSummary] = useState(null);
   const [ownedGames, setOwnedGames] = useState([]);
   const [recentlyPlayedGames, setRecentlyPlayedGames] = useState([]);
+  const [error, setError] = useState(null);
+
+  const apiKey = 'FFEC4AEACAC372C820F7F57EAE503D8D';
+  const proxyUrl = 'https://thingproxy.freeboard.io/fetch/';
 
   useEffect(() => {
     const fetchPlayerData = async () => {
-      const apiKey = 'FFEC4AEACAC372C820F7F57EAE503D8D';
-      const proxyUrl = 'https://thingproxy.freeboard.io/fetch/';
+      if (!steamId) return;
 
       try {
         // Fetch player summary
         const playerSummaryUrl = `${proxyUrl}https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`;
         const playerSummaryResponse = await fetch(playerSummaryUrl);
         const playerSummaryData = await playerSummaryResponse.json();
-        setPlayerSummary(playerSummaryData.response.players[0]);
+        
+        if (playerSummaryData.response.players.length > 0) {
+          setPlayerSummary(playerSummaryData.response.players[0]);
+        }
 
         // Fetch owned games
         const ownedGamesUrl = `${proxyUrl}https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apiKey}&steamid=${steamId}&include_appinfo=1&format=json`;
         const ownedGamesResponse = await fetch(ownedGamesUrl);
         const ownedGamesData = await ownedGamesResponse.json();
-        setOwnedGames(ownedGamesData.response.games);
+        
+        if (ownedGamesData.response && ownedGamesData.response.games) {
+          setOwnedGames(ownedGamesData.response.games);
+        }
 
         // Fetch recently played games
         const recentlyPlayedGamesUrl = `${proxyUrl}https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${apiKey}&steamid=${steamId}&format=json`;
         const recentlyPlayedGamesResponse = await fetch(recentlyPlayedGamesUrl);
         const recentlyPlayedGamesData = await recentlyPlayedGamesResponse.json();
-        setRecentlyPlayedGames(recentlyPlayedGamesData.response.games);
+        
+        if (recentlyPlayedGamesData.response && recentlyPlayedGamesData.response.games) {
+          setRecentlyPlayedGames(recentlyPlayedGamesData.response.games);
+        }
+
       } catch (error) {
         console.error('Error al obtener los datos del jugador:', error);
-        // Muestra un mensaje de error al usuario
+        setError('No se pudieron cargar los datos del jugador');
       }
     };
 
@@ -39,6 +52,8 @@ const SteamProfile = ({ steamId, setAppId, fetchAchievements, showAllGames }) =>
 
   return (
     <div>
+      {error && <div className="error-message">{error}</div>}
+      
       {playerSummary && (
         <div>
           <h2>{playerSummary.personaname}</h2>
@@ -56,7 +71,7 @@ const SteamProfile = ({ steamId, setAppId, fetchAchievements, showAllGames }) =>
                 <button
                   onClick={() => {
                     setAppId(game.appid);
-                    fetchAchievements();
+                    fetchAchievements(game.appid);
                   }}
                 >
                   View Achievements

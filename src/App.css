@@ -1,66 +1,101 @@
-/* App.css */
-
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
   margin: 0;
-  padding: 1;
+  padding: 20px;
+  line-height: 1.6;
 }
 
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
+h1 {
+  color: #1a73e8;
   text-align: center;
+  margin-bottom: 30px;
 }
 
 form {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: center;
   margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
 }
 
 input {
   padding: 10px;
-  margin: 10px 0;
-  width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
+  padding: 10px 15px;
+  background-color: #1a73e8;
+  color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.achievement-list {
+button:hover {
+  background-color: #1557b0;
+}
+
+.close-btn {
+  background-color: #d32f2f;
+}
+
+.close-btn:hover {
+  background-color: #9a0007;
+}
+
+.error-message {
+  color: #d32f2f;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.achievements-section {
+  margin-top: 30px;
+}
+
+.achievements-section h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.achievements-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
 }
 
-.achievement-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
 
-.achievement-item img {
-  max-width: 100%;
-  height: auto;
-}
+  .input-group {
+    flex-direction: column;
+  }
 
-.achievement-item h3 {
-  margin: 10px 0;
-}
-
-.achievement-item p {
-  margin: 5px 0;
+  .achievements-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
 }
